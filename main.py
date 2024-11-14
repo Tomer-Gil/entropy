@@ -46,7 +46,7 @@ def get_distribution_by_name(distribution_name):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
+    group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--distribution", "--dist", "-d", nargs="+", type=float, help="Specify the distribution")
     group.add_argument("--name", "-n", help="Specify a well-known distribution", choices=get_supported_choices())
     args = parser.parse_args()
