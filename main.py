@@ -56,8 +56,6 @@ if __name__ == "__main__":
             sys.exit(1)
         else:
             distribution = args.distribution
-            print(f"Distribution: {distribution}")
-            print(f"Entropy: {entropy(distribution)}")
     else:
         distribution_name = args.name
         distribution = get_distribution_by_name(distribution_name)
