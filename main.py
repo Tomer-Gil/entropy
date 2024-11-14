@@ -29,15 +29,37 @@ def handle_invalid_distribution():
     print("Please enter a valid distribution: all elements are non-negative, and sums up to 1.")
 
 
+def get_supported_choices():
+    return ["coin", "cube", "2cubes", "sum2cubes"]
+
+
+def get_distribution_by_name(distribution_name):
+    if distribution_name == "coin":
+        return np.ones(2) / 2
+    if distribution_name == "cube":
+        return np.ones(6) / 6
+    if distribution_name == "2cubes":
+        return np.ones(36) / 36
+    if distribution_name == "sum2cubes":
+        return np.concatenate((np.arange(1, 7), np.arange(5, 0, -1))) / 36
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("distribution", nargs="+", type=float, help="Specify the distibution")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--distribution", "--dist", "-d", nargs="+", type=float, help="Specify the distribution")
+    group.add_argument("--name", "-n", help="Specify a well-known distribution", choices=get_supported_choices())
     args = parser.parse_args()
-    if not is_valid_distribution(args.distribution):
-        handle_invalid_distribution()
-        sys.exit(1)
+    if args.distribution:
+        if not is_valid_distribution(args.distribution):
+            handle_invalid_distribution()
+            sys.exit(1)
+        else:
+            distribution = args.distribution
+            print(f"Distribution: {distribution}")
+            print(f"Entropy: {entropy(distribution)}")
     else:
-        distribution = args.distribution
-        print(f"Distribution: {distribution}")
-        print(f"Entropy: {entropy(distribution)}")
-
+        distribution_name = args.name
+        distribution = get_distribution_by_name(distribution_name)
+    print(f"Distribution: {distribution}")
+    print(f"Entropy: {entropy(distribution)}")
